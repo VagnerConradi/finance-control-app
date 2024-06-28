@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digitação de Dados</title>
+    <link rel="stylesheet" href="../../public/css/data-entry.css">
+</head>
+<body>
+    <header>
+        <h1>Digitação de Dados</h1>
+        <button onclick="location.href='dashboard.html'">Voltar ao Dashboard</button>
+        <button onclick="location.href='edit-fields.html'">Adicionar novo item</button>
+    </header>
+    <main>
+        <form id="data-entry-form">
+            <label for="expense">Despesa:</label>
+            <input type="text" id="expense" name="expense">
+            <label for="amount">Valor:</label>
+            <input type="number" id="amount" name="amount">
+            <!-- Placeholder para campos dinâmicos -->
+        </form>
+    </main>
+    <script>
+        // Função para carregar campos dinâmicos
+        function loadFields() {
+            let fields = JSON.parse(localStorage.getItem('fields')) || [];
+            const form = document.getElementById('data-entry-form');
+            fields.forEach(field => {
+                const label = document.createElement('label');
+                label.setAttribute('for', field);
+                label.textContent = field + ':';
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = field;
+                input.name = field;
+                form.appendChild(label);
+                form.appendChild(input);
+            });
+        }
+
+        // Carregar campos ao abrir a página
+        window.onload = loadFields;
+    </script>
+</body>
+</html>

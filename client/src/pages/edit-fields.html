@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edição de Campos</title>
+    <link rel="stylesheet" href="../../public/css/edit-fields.css">
+</head>
+<body>
+    <header>
+        <h1>Edição de Campos</h1>
+        <button onclick="location.href='dashboard.html'">Voltar ao Dashboard</button>
+        <button onclick="location.href='data-entry.html'">Voltar para Dados</button>
+    </header>
+    <main>
+        <form id="field-form">
+            <label for="field">Nome do Campo:</label>
+            <input type="text" id="field" name="field" required>
+            <button type="submit">Adicionar Campo</button>
+        </form>
+        <h2>Campos Existentes</h2>
+        <ul id="field-list"></ul>
+    </main>
+    <script>
+        // Função para adicionar um novo campo
+        document.getElementById('field-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fieldName = document.getElementById('field').value;
+            if (fieldName) {
+                let fields = JSON.parse(localStorage.getItem('fields')) || [];
+                fields.push(fieldName);
+                localStorage.setItem('fields', JSON.stringify(fields));
+                updateFieldList();
+                document.getElementById('field').value = '';
+                alert('Campo adicionado!');
+            }
+        });
+
+        // Função para remover um campo
+        function removeField(fieldName) {
+            let fields = JSON.parse(localStorage.getItem('fields')) || [];
+            fields = fields.filter(field => field !== fieldName);
+            localStorage.setItem('fields', JSON.stringify(fields));
+            updateFieldList();
+            alert('Campo removido!');
+        }
+
+        // Função para atualizar a lista de campos
+        function updateFieldList() {
+            const fieldList = document.getElementById('field-list');
+            fieldList.innerHTML = '';
+            let fields = JSON.parse(localStorage.getItem('fields')) || [];
+            fields.forEach(field => {
+                const li = document.createElement('li');
+                li.textContent = field;
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remover';
+                removeButton.onclick = function() { removeField(field); };
+                li.appendChild(removeButton);
+                fieldList.appendChild(li);
+            });
+        }
+
+        // Carregar a lista de campos ao abrir a página
+        window.onload = updateFieldList;
+    </script>
+</body>
+</html>
